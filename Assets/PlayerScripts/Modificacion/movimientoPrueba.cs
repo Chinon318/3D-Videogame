@@ -17,6 +17,7 @@ public class movimientoPrueba : MonoBehaviour
     {
         //inicializamos la variable charactercontroller
         characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -25,6 +26,7 @@ public class movimientoPrueba : MonoBehaviour
         float hor = Input.GetAxis("Horizontal");
         float ver = Input.GetAxis("Vertical");
         Vector3 movement = Vector3.zero;
+        float movementSpeed = 0;
 
         if( hor != 0 || ver != 0)
         {
@@ -36,7 +38,8 @@ public class movimientoPrueba : MonoBehaviour
             right.y = 0;
             right.Normalize();
 
-            Vector3 direction = forward * ver + camera.right * hor;
+            Vector3 direction = forward * ver + right * hor;
+            movementSpeed = Mathf.Clamp01(direction.magnitude);
             direction.Normalize();
 
             //Hacemos el movimiento hacia a delante
@@ -47,6 +50,7 @@ public class movimientoPrueba : MonoBehaviour
         }
         movement.y += gravity * Time.deltaTime;
         characterController.Move(movement);
+        animator.SetFloat("Speed", movementSpeed);
         
 
     }
